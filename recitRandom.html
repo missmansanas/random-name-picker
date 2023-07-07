@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <title>Recitation Randomizer</title>
+
+  <style>
+    body {
+      background-color: black;
+      color: aliceblue;
+      margin: 10vh 10vw;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.8rem;
+    }
+
+    #namePicker {
+      display: flex;
+      flex-direction: row;
+      align-items: start;
+      justify-content: center;
+      gap: 60px;
+    }
+
+    .box {
+      min-width: 300px;
+      text-align: center;
+    }
+
+    .box > h2 {
+      padding-top: 24px;
+      border-bottom: 3px solid rgb(229, 229, 229);
+    }
+
+    li {
+      list-style-type: none;
+      margin-left: 0px;
+      margin-bottom: 8px;
+    }
+
+    button {
+      width: 20%;
+      padding: 12px;
+      margin: 4px;
+      border-radius: 2px;
+      background-color:darkgreen;
+      font-size: 1rem;
+      border: none;
+      color: white;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    #buttonContainer {
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div id='buttonContainer'>
+    <button onclick='addName()'>Add Name</button>
+    <button onclick='pickName()' id='pickerBtn'>Pick Name</button>
+    <button onclick='reset()' id='resetBtn'>Clear List</button>
+  </div>
+
+  <div id='namePicker'>
+    <!-- List of Names To Pick From -->
+    <div class='box'>
+      <h2>Remaining</h2>
+      <div id='nameList'> </div>
+  
+      <h3 id='chosen'> </h3>
+
+    </div>
+  
+    <!-- List of Names Already Called -->
+    <div class='box'>
+      <h2>Done</h2>
+      <div id='namesDone'> </div>
+    </div>
+  </div>
+
+
+  <script>
+    let names = [];
+    let done = [];
+
+    function addName() {
+      let name = prompt('Enter Name');
+      names.push(name);
+      listNames();
+    }
+
+    function pickName() {
+      if (names.length === 0) {
+        let btn = document.querySelector('#pickerBtn');
+        btn.textContent = 'No names left';
+        setTimeout(() => {
+          btn.textContent = 'Pick Trainee';
+        }, 2000);
+        return;
+      }
+      
+      const num = Math.floor(Math.random() * names.length);
+      const chosen = names.splice(num, 1)[0];
+      done.push(chosen);
+      
+      let chosenDiv = document.querySelector('#chosen');
+      chosenDiv.textContent = `I pick...`;
+      setTimeout(() => {
+        chosenDiv.textContent = `${chosen}!`;
+      }, 3000);
+
+      setTimeout(() => {
+        listNames();
+        chosenDiv.textContent = '';
+      }, 8000);
+      
+    }
+
+    function reset() {
+      names = [];
+      done = [];
+      
+      listNames();
+      let btn = document.querySelector('#resetBtn');
+      btn.textContent = 'Ok, cleared!';
+      setTimeout(() => {
+        btn.textContent = 'Clear List';
+      }, 2000);
+    }
+
+    function listNames() {
+      let traineeDiv = document.querySelector('#nameList');
+      traineeDiv.innerHTML = '';
+      names.forEach((trainee) => {
+        const li = document.createElement('li');
+        li.innerHTML = trainee;
+        traineeDiv.appendChild(li);
+      })
+      
+      let doneDiv = document.querySelector('#namesDone');
+      doneDiv.innerHTML = '';
+      done.forEach((trainee) => {
+        const li = document.createElement('li');
+        li.innerHTML = trainee;
+        doneDiv.appendChild(li);
+      })
+
+    }
+
+    listNames();
+
+  </script>
+</body>
+</html>
